@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="src/css/style.css">
+
+    <title>TODO.LIST</title>
+  </head>
+
+  <body>
+    <!-- O Vuejs será instânciado na div id="app" abaixo -->
+    <div id="app">
+      <div id="wrapper">
+        <h1>TODO.LIST</h1>
+
+        <!-- Estrutura do formulário para incluir novos itens -->
+        <div id="form-wrapper">
+          <div id="o-form">
+            <input type="text" id="text-novo-item" max-lenght="20">
+            <div>
+              <input type="checkbox" id="is-importante">
+              <label for="is-importante">Importante</label>
+            </div>
+            <button>Salvar</button>
+          </div>
+          <p id="contagem">0/20</p>
+        </div>
+
+        <!-- Estrutura modelo da lista de itens que serão gerados a partir do formulário -->
+        <div id="list-wrapper">
+
+          <!-- Uso da diretiva Vue v-for, para percorrer o array da lista de itens, repetindo assim esta estrutura para cada item -->
+          <div class="item" v-for="item in lista">
+            <!-- Uso da diretiva Vue v-text para imprimir o texto de cada item, ao invés de usar template string -->
+            <p class="texto-item" v-text="item.texto"></p><!-- "item.texto" está acessando o atributo texto de cada objeto item -->
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3.0.0-rc.5/dist/vue.global.js"></script>
+
+    <script type="text/javascript">
+      Vue.createApp({
+        data() {
+          return {
+            lista: [
+              {
+                texto: "Item importante",
+                importante: true,
+                feito: false,
+              },
+              {
+                texto: "Item feito",
+                importante: true,
+                feito: true,
+              },
+              {
+                texto: "Item a fazer",
+                importante: false,
+                feito: false,
+              },
+            ],
+          }
+        },
+      }).mount("#app")
+    </script>
+
+  </body>
+
+</html>
