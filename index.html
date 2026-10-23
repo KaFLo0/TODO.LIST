@@ -20,14 +20,19 @@
         <!-- Estrutura do formulário para incluir novos itens -->
         <div id="form-wrapper">
           <div id="o-form">
-            <input type="text" id="text-novo-item" max-lenght="20" placeholder="Digite aqui...">
+            <!-- Adição da diretiva v-model nos campos de input para two-way data binding -->
+            <input type="text" id="text-novo-item" maxlength="20" placeholder="Digite aqui..."
+              v-model="textoNovoItem"
+              @keyup.enter="salvarNovoItem"
+            >
             <div>
-              <input type="checkbox" id="is-importante">
+              <input type="checkbox" id="is-importante" v-model="novoItemImportante">
               <label for="is-importante">Importante</label>
             </div>
-            <button>Salvar</button>
+            <!-- Adição de evento de click via diretiva "v-on:click", mas usando sua forma simplificada @click -->
+            <button @click="salvarNovoItem" v-if="textoNovoItem.length > 0">Salvar</button>
           </div>
-          <p id="contagem">0/20</p>
+          <p id="contagem">{{ digitos }}/20</p>
         </div>
 
         <!-- Estrutura modelo da lista de itens que serão gerados a partir do formulário -->
@@ -36,6 +41,7 @@
           <!-- Uso da diretiva Vue v-for, para percorrer o array da lista de itens, repetindo assim esta estrutura para cada item.
           Estamos "bind'ando" a classe importante se o atributo importante do item estiver com o valor true, idem para a classe feito -->
           <div class="item"
+            v-cloak
             v-for="item in lista"
             v-bind:class="{importante: item.importante, feito: item.feito}"
             v-on:click="item.feito = !item.feito"
@@ -57,24 +63,30 @@
       Vue.createApp({
         data() {
           return {
-            lista: [
-              {
-                texto: "Item importante",
-                importante: true,
-                feito: false,
-              },
-              {
-                texto: "Item feito",
-                importante: false,
-                feito: true,
-              },
-              {
-                texto: "Item a fazer",
-                importante: false,
-                feito: false,
-              },
-            ],
+            textoNovoItem: "",
+            novoItemImportante: false,
+            lista: [],
           }
+        },
+        methods: {
+          salvarNovoItem() {
+            if(this.textoNovoItem.length > 0) {
+              let novoItem = {
+                id: new Date().getTime(),
+                texto: this.textoNovoItem,
+                importante: this.novoItemImportante,
+                feito: false,
+              };
+              this.lista.push(novoItem);
+              this.textoNovoItem = "";
+              this.novoItemImportante = false;
+            }
+          },
+        },
+        computed: {
+          digitos() {
+            return this.textoNovoItem.length;
+          },
         },
       }).mount("#app")
     </script>
